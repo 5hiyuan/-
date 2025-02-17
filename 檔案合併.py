@@ -6,7 +6,7 @@ source_dir = r'D:\Python\抓取結果\章節抓取' # 資料路徑如有修改�
 target_dir = r'D:\Python\抓取結果' # 同上，可更改路徑，但不建議改掉 \抓取結果
 
 # 合併後的檔案名稱
-merged_filename = "101-300"
+merged_filename = "" # 自行設定合併後的檔案名稱是什麼，會根據輸入的內容變成《檔案名稱》
 
 # 替換清單
 replacement_dict = {
