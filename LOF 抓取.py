@@ -16,7 +16,7 @@ def load_cookies_from_file(filepath):
     return session
 
 # 建立已登入的 Session，使用 cookies.txt 中的 Cookie
-session = load_cookies_from_file(r'') # 路徑根據實際情況填寫，資料夾路徑+檔案名稱.txt，例如 'd:\lofcookie.txt'
+session = load_cookies_from_file(r'') # 路徑根據實際情況填寫，資料夾路徑+檔案名稱.txt，例如 'd:\cookies.txt'
 
 # 起始URL和抓取模式設定
 start_url = "" # 要抓的網址放這裡
