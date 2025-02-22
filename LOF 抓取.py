@@ -26,7 +26,7 @@ fetch_single_article = False  # True 只抓取單篇文章；False 抓取多篇
 
 def fetch_article_content(soup, url):
     title_tag = soup.find('h2')
-    title = title_tag.text.strip() if title_tag and title_tag.text.strip() else url.split('/')[-1]  # 沒標題則用 URL 作為標題
+    title = title_tag.text.strip() if title_tag and title_tag.text.strip() else url.split('/')[-1]
 
     content = ""
     h2_tag = soup.find('h2')
@@ -35,17 +35,14 @@ def fetch_article_content(soup, url):
         return title, content
 
     paragraphs = []
-    for elem in h2_tag.find_all_next(['p', 'br']):  # 抓取 <h2> 之後的所有 <p> 和 <br>
-        if elem.name == 'p':  # 處理 <p> 段落
-            paragraph_text = elem.get_text(separator="")  # **確保 <strong> 不會產生額外換行**
-            paragraph_text = paragraph_text.replace("\n", " ")  # 避免過多換行
-            if paragraph_text.strip():  # 過濾空白行
-                paragraphs.append(paragraph_text)
-        elif elem.name == 'br':  # 處理 <br>
-            if paragraphs and paragraphs[-1].strip():  # 確保 <br> 讓上一個段落結束
-                paragraphs[-1] += "\n\n"
+    for elem in h2_tag.find_all_next(['p']):  
+        # 用 \n 來替換 <br>，確保換行
+        paragraph_text = elem.get_text(separator="\n").strip()
+        if paragraph_text:
+            paragraphs.append(paragraph_text)
 
-    content = "\n\n".join(paragraphs).rstrip("\n")  # 確保結尾沒有多餘換行
+    # 將段落合併，每個 <p> 保留 1 個空行
+    content = "\n\n".join(paragraphs)
 
     return title, content
 
