@@ -2,13 +2,13 @@
 
 ### 初次使用請先閱讀
 - [檔案開啟教學](https://rainbow-argon-393.notion.site/VSC-Python-py-5204886a37dd483fb71130161ba479d3?pvs=4)  
-- [cookie 轉存 TXT（Lof抓取用）](https://rainbow-argon-393.notion.site/LOFTER-cookies-1326c803ace38073b66ed19a192985d8?pvs=4)
 
 ### Lofter 抓取與合併
 
 **抓取文章**
-1. 檔案抓取會根據 PYTHON 所在位置自動建立【抓取結果】資料夾
-2. 可變更抓取資料夾名稱，但如果後續要執行合併檔案，記得要連檔案合併中的路徑也要修改
+1. 登入 Lofter 後儲存 [cookie 為 TXT](https://rainbow-argon-393.notion.site/LOFTER-cookies-1326c803ace38073b66ed19a192985d8?pvs=4)
+2. 檔案抓取會根據 PYTHON 所在位置自動建立【抓取結果】資料夾
+3. 可變更抓取資料夾名稱，但如果後續要執行合併檔案，記得要連檔案合併中的路徑也要修改
 
 **合併檔案**
 1. 因為設定是單篇各自抓取，所以會有多個檔案，如果需要合併，請在【抓取結果】中另外新建【章節抓取】
