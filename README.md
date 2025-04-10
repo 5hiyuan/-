@@ -1,10 +1,10 @@
-# 不定時更新，更新內容見 commit
+## 不定時更新，更新內容見 commit
 
-## 初次使用請先閱讀
+### 初次使用請先閱讀
 - [檔案開啟教學](https://rainbow-argon-393.notion.site/VSC-Python-py-5204886a37dd483fb71130161ba479d3?pvs=4)  
 - [cookie 轉存 TXT（Lof抓取用）](https://rainbow-argon-393.notion.site/LOFTER-cookies-1326c803ace38073b66ed19a192985d8?pvs=4)
 
-## Lofter 抓取與合併
+### Lofter 抓取與合併
 
 **抓取文章**
 1. 檔案抓取會根據 PYTHON 所在位置自動建立【抓取結果】資料夾
@@ -15,7 +15,7 @@
 2. 把需要合併的文章放到【章節抓取】中，注意檔案命名要有規律
 3. 執行 檔案合併.py
 
-## AO3 批次下載
+### AO3 批次下載
 1. 安裝瀏覽器外掛 [Cookie-Editor](https://chrome.google.com/webstore/detail/cookie-editor/hlkenndednhfkekhgcdicdfddnkalmdm)
 2. 進入 AO3 網站（不用登入）後，點選擴充，Export As JSON
 3. 在 VSC 另開新檔案儲存瀏覽器匯出的 JSON，名稱預設為 AO3cookie（可隨喜變更，但記得修改程式碼）
