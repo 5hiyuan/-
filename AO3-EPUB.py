@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import math
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
@@ -20,8 +21,12 @@ def load_cookies_from_txt(txt_path):
     with open(txt_path, "r", encoding="utf-8") as f:
         for line in f:
             if "=" in line:
-                name, value = line.strip().split("=", 1)
-                cookies[name] = value
+                parts = line.strip().split("=", 1)
+                if len(parts) == 2:
+                    name, value = parts
+                    cookies[name] = value
+                else:
+                    print(f"⚠️ 無效的 cookie 格式：{line}")
     return cookies
 
 cookies = load_cookies_from_txt(cookie_txt_file)
@@ -42,6 +47,11 @@ def log_error(url, reason):
     with open("錯誤清單.txt", "a", encoding="utf-8") as f:
         f.write(f"{url}  # {reason}\n")
     print(f"❌ 錯誤：{url}  # {reason}")
+
+def exponential_backoff(attempt):
+    delay = min(30 * math.exp(attempt - 1), 300)
+    print(f"🔄 等待 {int(delay)} 秒後重試...")
+    time.sleep(delay)
 
 # 抓取網址
 df = pd.read_excel(input_file, sheet_name="EPUB")
@@ -68,9 +78,7 @@ def attempt_download(work_url):
     try:
         time.sleep(random.uniform(1.0, 3.0))
         r = requests.get(work_url + "?view_adult=true&view_full_work=true", headers=headers, cookies=cookies, timeout=180)
-        if r.status_code != 200:
-            log_error(work_url, f"作品頁錯誤 HTTP {r.status_code}")
-            return (work_url, "RETRY")
+        r.raise_for_status()
 
         soup = BeautifulSoup(r.text, "html.parser")
         title_tag = soup.select_one("h2.title")
@@ -86,19 +94,23 @@ def attempt_download(work_url):
         download_url = "https://archiveofourown.org" + epub_link["href"]
         time.sleep(random.uniform(1.0, 2.0))
         res = requests.get(download_url, headers=headers, cookies=cookies, timeout=180)
-        if res.status_code != 200:
-            log_error(work_url, f"EPUB 下載錯誤 HTTP {res.status_code}")
-            return (work_url, "FAIL")
+        res.raise_for_status()
 
-        filename = f"{author}〈{title}〉.epub"
+        filename = f"{title}.epub" # 可依習慣變更下載檔案名稱格式
         filepath = os.path.join(output_dir, filename)
         with open(filepath, "wb") as f:
             f.write(res.content)
         print(f"✅ 已儲存：{filename}\n📁 儲存路徑：{filepath}")
         return (work_url, "SUCCESS")
 
+    except requests.exceptions.Timeout as e:
+        print(f"⏳ 請求超時：{e}")
+        return (work_url, "RETRY")
+    except requests.exceptions.RequestException as e:
+        print(f"❌ 請求失敗：{e}")
+        return (work_url, "RETRY")
     except Exception as e:
-        print(f"⚠️ 抓取失敗（{str(e)}）將稍後重試：{work_url}")
+        print(f"⚠️ 其他錯誤：{e}")
         return (work_url, "RETRY")
 
 # 同步進行最多兩篇
@@ -126,7 +138,7 @@ for work_url in retry_queue:
             log_error(work_url, "重試 10 次失敗")
             fail_urls.append(work_url)
         else:
-            time.sleep(attempt * 30)
+            exponential_backoff(attempt)
 
 # 統計報告
 print("\n📊 抓取完成報告")
