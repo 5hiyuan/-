@@ -23,3 +23,4 @@
 2. 建立【抓取清單】表單，將工作表命名為 EPUB，並建立欄位 URL（為方便辨識可額外新增 TITLE）
 3. URL 只需貼上：https://archiveofourown.org/works/文章ID
 4. 執行 AO3-EPUB.py
+5. 若要變更下載檔案名稱格式，找到 filename 並依習慣更改即可
